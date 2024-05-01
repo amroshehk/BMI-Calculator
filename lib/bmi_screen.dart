@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:bmi_calculator/bmi_result_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -11,11 +14,10 @@ class BmiScreen extends StatefulWidget {
 }
 
 class _BmiScreenState extends State<BmiScreen> {
-  var value1 = 120.0;
-  var weghitValue = 60.0;
+  var height = 120.0;
+  var weight = 70.0;
   var ageValue = 28.0;
   var isMale = true;
-  var isFeMale = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,17 +104,17 @@ class _BmiScreenState extends State<BmiScreen> {
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
                     children: [
-                      Text("${value1.round()}"   ,style: TextStyle(fontWeight:FontWeight.w900,fontSize: 50.0),),
+                      Text("${height.round()}"   ,style: TextStyle(fontWeight:FontWeight.w900,fontSize: 50.0),),
                       SizedBox(width: 10,),
                       Text("CM"   ,style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),)
                     ],
                   ),
-                  Slider(value: value1,
+                  Slider(value: height,
                       max: 220.0,
                       min: 80.0,
                       activeColor: Colors.purple,
                       onChanged: (value) {
-                        value1 = value;
+                        height = value;
                         setState(() {
 
                         });
@@ -137,12 +139,12 @@ class _BmiScreenState extends State<BmiScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("WEIGHT"   ,style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20.0),),
-                            Text("${weghitValue.round()}"   ,style: TextStyle(fontWeight:FontWeight.w900,fontSize: 50.0),),
+                            Text("${weight.round()}"   ,style: TextStyle(fontWeight:FontWeight.w900,fontSize: 50.0),),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 FloatingActionButton(onPressed: (){
-                                  weghitValue--;
+                                  weight--;
                                   setState(() {
 
                                   });
@@ -150,7 +152,7 @@ class _BmiScreenState extends State<BmiScreen> {
                                 mini: true,),
                                 SizedBox(width: 10,),
                                 FloatingActionButton(onPressed: (){
-                                  weghitValue++;
+                                  weight++;
                                   setState(() {
 
                                   });
@@ -205,7 +207,16 @@ class _BmiScreenState extends State<BmiScreen> {
               width: double.infinity,
               color: Colors.purple,
               child: MaterialButton(
-                onPressed: () {},
+                onPressed: () {
+                  var result = weight / pow(height/100, 2);
+                  var gender = isMale?"Male":"Female";
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ResultScreen(
+                      result: result,
+                      age: ageValue,
+                      gender: gender
+
+                  ),) );
+                },
                 child: Text(
                   "CALCULATE",
                   style: TextStyle(
